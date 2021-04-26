@@ -35,8 +35,8 @@ import AXI4Lite :: *;
 // It defines both a "non-synth" and a "synth" version of the hi level interface
 // for easy bluespec component composition and for clean verilog generation.
 // This interface aims to factor the control signals from the WindCoreLo
-// interface into a single AXILite slave port, and re export the other memory
-// ports.
+// interface into a single AXILite subordinate port, and re export the other
+// memory ports.
 
 // NOTE: typically, these two versions of the same interface would be defined
 // via a macro, but it seams the verilog preprocessor used by bsc is not
@@ -48,93 +48,93 @@ import AXI4Lite :: *;
 ////////////////////////////////////////////////////////////////////////////////
 
 interface WindCoreHi #(
-// AXI lite slave control port parameters
-  numeric type axls_control_addr
-, numeric type axls_control_data
-, numeric type axls_control_awuser
-, numeric type axls_control_wuser
-, numeric type axls_control_buser
-, numeric type axls_control_aruser
-, numeric type axls_control_ruser
-// AXI master 0 port parameters
-, numeric type axm_0_id
-, numeric type axm_0_addr
-, numeric type axm_0_data
-, numeric type axm_0_awuser
-, numeric type axm_0_wuser
-, numeric type axm_0_buser
-, numeric type axm_0_aruser
-, numeric type axm_0_ruser
-// AXI master 1 port parameters
-, numeric type axm_1_id
-, numeric type axm_1_addr
-, numeric type axm_1_data
-, numeric type axm_1_awuser
-, numeric type axm_1_wuser
-, numeric type axm_1_buser
-, numeric type axm_1_aruser
-, numeric type axm_1_ruser
-// AXI slave 0 port parameters
-, numeric type axs_0_id
-, numeric type axs_0_addr
-, numeric type axs_0_data
-, numeric type axs_0_awuser
-, numeric type axs_0_wuser
-, numeric type axs_0_buser
-, numeric type axs_0_aruser
-, numeric type axs_0_ruser
+// AXI lite subordinate control port parameters
+  numeric type t_axls_control_addr
+, numeric type t_axls_control_data
+, numeric type t_axls_control_awuser
+, numeric type t_axls_control_wuser
+, numeric type t_axls_control_buser
+, numeric type t_axls_control_aruser
+, numeric type t_axls_control_ruser
+// AXI manager 0 port parameters
+, numeric type t_axm_0_id
+, numeric type t_axm_0_addr
+, numeric type t_axm_0_data
+, numeric type t_axm_0_awuser
+, numeric type t_axm_0_wuser
+, numeric type t_axm_0_buser
+, numeric type t_axm_0_aruser
+, numeric type t_axm_0_ruser
+// AXI manager 1 port parameters
+, numeric type t_axm_1_id
+, numeric type t_axm_1_addr
+, numeric type t_axm_1_data
+, numeric type t_axm_1_awuser
+, numeric type t_axm_1_wuser
+, numeric type t_axm_1_buser
+, numeric type t_axm_1_aruser
+, numeric type t_axm_1_ruser
+// AXI subordinate 0 port parameters
+, numeric type t_axs_0_id
+, numeric type t_axs_0_addr
+, numeric type t_axs_0_data
+, numeric type t_axs_0_awuser
+, numeric type t_axs_0_wuser
+, numeric type t_axs_0_buser
+, numeric type t_axs_0_aruser
+, numeric type t_axs_0_ruser
 );
 
   // Control interface
   ////////////////////
 
-  // AXI lite slave control port
+  // AXI lite subordinate control port
   interface AXI4Lite_Slave #(
-    axls_control_addr
-  , axls_control_data
-  , axls_control_awuser
-  , axls_control_wuser
-  , axls_control_buser
-  , axls_control_aruser
-  , axls_control_ruser
-  ) control_slave;
+    t_axls_control_addr
+  , t_axls_control_data
+  , t_axls_control_awuser
+  , t_axls_control_wuser
+  , t_axls_control_buser
+  , t_axls_control_aruser
+  , t_axls_control_ruser
+  ) control_subordinate;
 
   // Memory interfaces
   ////////////////////
 
-  // AXI master 0 port parameters
+  // AXI manager 0 port parameters
   interface AXI4_Master #(
-    axm_0_id
-  , axm_0_addr
-  , axm_0_data
-  , axm_0_awuser
-  , axm_0_wuser
-  , axm_0_buser
-  , axm_0_aruser
-  , axm_0_ruser
-  ) master_0;
-  // AXI master 1 port parameters
+    t_axm_0_id
+  , t_axm_0_addr
+  , t_axm_0_data
+  , t_axm_0_awuser
+  , t_axm_0_wuser
+  , t_axm_0_buser
+  , t_axm_0_aruser
+  , t_axm_0_ruser
+  ) manager_0;
+  // AXI manager 1 port parameters
   interface AXI4_Master #(
-    axm_1_id
-  , axm_1_addr
-  , axm_1_data
-  , axm_1_awuser
-  , axm_1_wuser
-  , axm_1_buser
-  , axm_1_aruser
-  , axm_1_ruser
-  ) master_1;
-  // AXI slave 0 port parameters
+    t_axm_1_id
+  , t_axm_1_addr
+  , t_axm_1_data
+  , t_axm_1_awuser
+  , t_axm_1_wuser
+  , t_axm_1_buser
+  , t_axm_1_aruser
+  , t_axm_1_ruser
+  ) manager_1;
+  // AXI subordinate 0 port parameters
   interface AXI4_Slave #(
-    axs_0_id
-  , axs_0_addr
-  , axs_0_data
-  , axs_0_awuser
-  , axs_0_wuser
-  , axs_0_buser
-  , axs_0_aruser
-  , axs_0_ruser
-  ) slave_0;
+    t_axs_0_id
+  , t_axs_0_addr
+  , t_axs_0_data
+  , t_axs_0_awuser
+  , t_axs_0_wuser
+  , t_axs_0_buser
+  , t_axs_0_aruser
+  , t_axs_0_ruser
+  ) subordinate_0;
 
 endinterface
 
@@ -143,93 +143,93 @@ endinterface
 ////////////////////////////////////////////////////////////////////////////////
 
 interface WindCoreHi_Synth #(
-// AXI lite slave control port parameters
-  numeric type axls_control_addr
-, numeric type axls_control_data
-, numeric type axls_control_awuser
-, numeric type axls_control_wuser
-, numeric type axls_control_buser
-, numeric type axls_control_aruser
-, numeric type axls_control_ruser
-// AXI master 0 port parameters
-, numeric type axm_0_id
-, numeric type axm_0_addr
-, numeric type axm_0_data
-, numeric type axm_0_awuser
-, numeric type axm_0_wuser
-, numeric type axm_0_buser
-, numeric type axm_0_aruser
-, numeric type axm_0_ruser
-// AXI master 1 port parameters
-, numeric type axm_1_id
-, numeric type axm_1_addr
-, numeric type axm_1_data
-, numeric type axm_1_awuser
-, numeric type axm_1_wuser
-, numeric type axm_1_buser
-, numeric type axm_1_aruser
-, numeric type axm_1_ruser
-// AXI slave 0 port parameters
-, numeric type axs_0_id
-, numeric type axs_0_addr
-, numeric type axs_0_data
-, numeric type axs_0_awuser
-, numeric type axs_0_wuser
-, numeric type axs_0_buser
-, numeric type axs_0_aruser
-, numeric type axs_0_ruser
+// AXI lite subordinate control port parameters
+  numeric type t_axls_control_addr
+, numeric type t_axls_control_data
+, numeric type t_axls_control_awuser
+, numeric type t_axls_control_wuser
+, numeric type t_axls_control_buser
+, numeric type t_axls_control_aruser
+, numeric type t_axls_control_ruser
+// AXI manager 0 port parameters
+, numeric type t_axm_0_id
+, numeric type t_axm_0_addr
+, numeric type t_axm_0_data
+, numeric type t_axm_0_awuser
+, numeric type t_axm_0_wuser
+, numeric type t_axm_0_buser
+, numeric type t_axm_0_aruser
+, numeric type t_axm_0_ruser
+// AXI manager 1 port parameters
+, numeric type t_axm_1_id
+, numeric type t_axm_1_addr
+, numeric type t_axm_1_data
+, numeric type t_axm_1_awuser
+, numeric type t_axm_1_wuser
+, numeric type t_axm_1_buser
+, numeric type t_axm_1_aruser
+, numeric type t_axm_1_ruser
+// AXI subordinate 0 port parameters
+, numeric type t_axs_0_id
+, numeric type t_axs_0_addr
+, numeric type t_axs_0_data
+, numeric type t_axs_0_awuser
+, numeric type t_axs_0_wuser
+, numeric type t_axs_0_buser
+, numeric type t_axs_0_aruser
+, numeric type t_axs_0_ruser
 );
 
   // Control interface
   ////////////////////
 
-  // AXI lite slave control port
+  // AXI lite subordinate control port
   interface AXI4Lite_Slave_Synth #(
-    axls_control_addr
-  , axls_control_data
-  , axls_control_awuser
-  , axls_control_wuser
-  , axls_control_buser
-  , axls_control_aruser
-  , axls_control_ruser
-  ) control_slave;
+    t_axls_control_addr
+  , t_axls_control_data
+  , t_axls_control_awuser
+  , t_axls_control_wuser
+  , t_axls_control_buser
+  , t_axls_control_aruser
+  , t_axls_control_ruser
+  ) control_subordinate;
 
   // Memory interfaces
   ////////////////////
 
-  // AXI master 0 port parameters
+  // AXI manager 0 port parameters
   interface AXI4_Master_Synth #(
-    axm_0_id
-  , axm_0_addr
-  , axm_0_data
-  , axm_0_awuser
-  , axm_0_wuser
-  , axm_0_buser
-  , axm_0_aruser
-  , axm_0_ruser
-  ) master_0;
-  // AXI master 1 port parameters
+    t_axm_0_id
+  , t_axm_0_addr
+  , t_axm_0_data
+  , t_axm_0_awuser
+  , t_axm_0_wuser
+  , t_axm_0_buser
+  , t_axm_0_aruser
+  , t_axm_0_ruser
+  ) manager_0;
+  // AXI manager 1 port parameters
   interface AXI4_Master_Synth #(
-    axm_1_id
-  , axm_1_addr
-  , axm_1_data
-  , axm_1_awuser
-  , axm_1_wuser
-  , axm_1_buser
-  , axm_1_aruser
-  , axm_1_ruser
-  ) master_1;
-  // AXI slave 0 port parameters
+    t_axm_1_id
+  , t_axm_1_addr
+  , t_axm_1_data
+  , t_axm_1_awuser
+  , t_axm_1_wuser
+  , t_axm_1_buser
+  , t_axm_1_aruser
+  , t_axm_1_ruser
+  ) manager_1;
+  // AXI subordinate 0 port parameters
   interface AXI4_Slave_Synth #(
-    axs_0_id
-  , axs_0_addr
-  , axs_0_data
-  , axs_0_awuser
-  , axs_0_wuser
-  , axs_0_buser
-  , axs_0_aruser
-  , axs_0_ruser
-  ) slave_0;
+    t_axs_0_id
+  , t_axs_0_addr
+  , t_axs_0_data
+  , t_axs_0_awuser
+  , t_axs_0_wuser
+  , t_axs_0_buser
+  , t_axs_0_aruser
+  , t_axs_0_ruser
+  ) subordinate_0;
 
 endinterface
 
@@ -238,84 +238,85 @@ endinterface
 ////////////////////////////////////////////////////////////////////////////////
 
 module toWindCoreHi_Synth #(
-  WindCoreHi #( // AXI lite slave control port parameters
-                axls_control_addr
-              , axls_control_data
-              , axls_control_awuser
-              , axls_control_wuser
-              , axls_control_buser
-              , axls_control_aruser
-              , axls_control_ruser
-              // AXI master 0 port parameters
-              , axm_0_id
-              , axm_0_addr
-              , axm_0_data
-              , axm_0_awuser
-              , axm_0_wuser
-              , axm_0_buser
-              , axm_0_aruser
-              , axm_0_ruser
-              // AXI master 1 port parameters
-              , axm_1_id
-              , axm_1_addr
-              , axm_1_data
-              , axm_1_awuser
-              , axm_1_wuser
-              , axm_1_buser
-              , axm_1_aruser
-              , axm_1_ruser
-              // AXI slave 0 port parameters
-              , axs_0_id
-              , axs_0_addr
-              , axs_0_data
-              , axs_0_awuser
-              , axs_0_wuser
-              , axs_0_buser
-              , axs_0_aruser
-              , axs_0_ruser) ifc)
-  (WindCoreHi_Synth #( // AXI lite slave control port parameters
-                       axls_control_addr
-                     , axls_control_data
-                     , axls_control_awuser
-                     , axls_control_wuser
-                     , axls_control_buser
-                     , axls_control_aruser
-                     , axls_control_ruser
-                     // AXI master 0 port parameters
-                     , axm_0_id
-                     , axm_0_addr
-                     , axm_0_data
-                     , axm_0_awuser
-                     , axm_0_wuser
-                     , axm_0_buser
-                     , axm_0_aruser
-                     , axm_0_ruser
-                     // AXI master 1 port parameters
-                     , axm_1_id
-                     , axm_1_addr
-                     , axm_1_data
-                     , axm_1_awuser
-                     , axm_1_wuser
-                     , axm_1_buser
-                     , axm_1_aruser
-                     , axm_1_ruser
-                     // AXI slave 0 port parameters
-                     , axs_0_id
-                     , axs_0_addr
-                     , axs_0_data
-                     , axs_0_awuser
-                     , axs_0_wuser
-                     , axs_0_buser
-                     , axs_0_aruser
-                     , axs_0_ruser));
-  let control_slave_synth <- toAXI4Lite_Slave_Synth (ifc.control_slave);
-  let master_0_synth <- toAXI4_Master_Synth (ifc.master_0);
-  let master_1_synth <- toAXI4_Master_Synth (ifc.master_1);
-  let slave_0_synth <- toAXI4_Slave_Synth (ifc.slave_0);
-  interface control_slave = control_slave_synth;
-  interface master_0 = master_0_synth;
-  interface master_1 = master_1_synth;
-  interface slave_0 = slave_0_synth;
+  WindCoreHi #( // AXI lite subordinate control port parameters
+                t_axls_control_addr
+              , t_axls_control_data
+              , t_axls_control_awuser
+              , t_axls_control_wuser
+              , t_axls_control_buser
+              , t_axls_control_aruser
+              , t_axls_control_ruser
+              // AXI manager 0 port parameters
+              , t_axm_0_id
+              , t_axm_0_addr
+              , t_axm_0_data
+              , t_axm_0_awuser
+              , t_axm_0_wuser
+              , t_axm_0_buser
+              , t_axm_0_aruser
+              , t_axm_0_ruser
+              // AXI manager 1 port parameters
+              , t_axm_1_id
+              , t_axm_1_addr
+              , t_axm_1_data
+              , t_axm_1_awuser
+              , t_axm_1_wuser
+              , t_axm_1_buser
+              , t_axm_1_aruser
+              , t_axm_1_ruser
+              // AXI subordinate 0 port parameters
+              , t_axs_0_id
+              , t_axs_0_addr
+              , t_axs_0_data
+              , t_axs_0_awuser
+              , t_axs_0_wuser
+              , t_axs_0_buser
+              , t_axs_0_aruser
+              , t_axs_0_ruser) ifc)
+  (WindCoreHi_Synth #( // AXI lite subordinate control port parameters
+                       t_axls_control_addr
+                     , t_axls_control_data
+                     , t_axls_control_awuser
+                     , t_axls_control_wuser
+                     , t_axls_control_buser
+                     , t_axls_control_aruser
+                     , t_axls_control_ruser
+                     // AXI manager 0 port parameters
+                     , t_axm_0_id
+                     , t_axm_0_addr
+                     , t_axm_0_data
+                     , t_axm_0_awuser
+                     , t_axm_0_wuser
+                     , t_axm_0_buser
+                     , t_axm_0_aruser
+                     , t_axm_0_ruser
+                     // AXI manager 1 port parameters
+                     , t_axm_1_id
+                     , t_axm_1_addr
+                     , t_axm_1_data
+                     , t_axm_1_awuser
+                     , t_axm_1_wuser
+                     , t_axm_1_buser
+                     , t_axm_1_aruser
+                     , t_axm_1_ruser
+                     // AXI subordinate 0 port parameters
+                     , t_axs_0_id
+                     , t_axs_0_addr
+                     , t_axs_0_data
+                     , t_axs_0_awuser
+                     , t_axs_0_wuser
+                     , t_axs_0_buser
+                     , t_axs_0_aruser
+                     , t_axs_0_ruser));
+  let control_subordinate_synth <- toAXI4Lite_Slave_Synth
+                                     (ifc.control_subordinate);
+  let manager_0_synth <- toAXI4_Master_Synth (ifc.manager_0);
+  let manager_1_synth <- toAXI4_Master_Synth (ifc.manager_1);
+  let subordinate_0_synth <- toAXI4_Slave_Synth (ifc.subordinate_0);
+  interface control_subordinate = control_subordinate_synth;
+  interface manager_0 = manager_0_synth;
+  interface manager_1 = manager_1_synth;
+  interface subordinate_0 = subordinate_0_synth;
 endmodule
 
 endpackage

@@ -33,78 +33,80 @@ import WindCoreHi :: *;
 
 // Convert a WindCoreLo into a WindCoreHi
 module windCoreLo2Hi #(
-  WindCoreLo #( // AXI master 0 port parameters
-                axm_0_id
-              , axm_0_addr
-              , axm_0_data
-              , axm_0_awuser
-              , axm_0_wuser
-              , axm_0_buser
-              , axm_0_aruser
-              , axm_0_ruser
-              // AXI master 1 port parameters
-              , axm_1_id
-              , axm_1_addr
-              , axm_1_data
-              , axm_1_awuser
-              , axm_1_wuser
-              , axm_1_buser
-              , axm_1_aruser
-              , axm_1_ruser
-              // AXI slave 0 port parameters
-              , axs_0_id
-              , axs_0_addr
-              , axs_0_data
-              , axs_0_awuser
-              , axs_0_wuser
-              , axs_0_buser
-              , axs_0_aruser
-              , axs_0_ruser) lo)
-  (WindCoreHi #( // AXI lite slave control port parameters
-                 axls_control_addr
-               , axls_control_data
-               , axls_control_awuser
-               , axls_control_wuser
-               , axls_control_buser
-               , axls_control_aruser
-               , axls_control_ruser
-               // AXI master 0 port parameters
-               , axm_0_id
-               , axm_0_addr
-               , axm_0_data
-               , axm_0_awuser
-               , axm_0_wuser
-               , axm_0_buser
-               , axm_0_aruser
-               , axm_0_ruser
-               // AXI master 1 port parameters
-               , axm_1_id
-               , axm_1_addr
-               , axm_1_data
-               , axm_1_awuser
-               , axm_1_wuser
-               , axm_1_buser
-               , axm_1_aruser
-               , axm_1_ruser
-               // AXI slave 0 port parameters
-               , axs_0_id
-               , axs_0_addr
-               , axs_0_data
-               , axs_0_awuser
-               , axs_0_wuser
-               , axs_0_buser
-               , axs_0_aruser
-               , axs_0_ruser));
+  WindCoreLo #( // AXI manager 0 port parameters
+                t_axm_0_id
+              , t_axm_0_addr
+              , t_axm_0_data
+              , t_axm_0_awuser
+              , t_axm_0_wuser
+              , t_axm_0_buser
+              , t_axm_0_aruser
+              , t_axm_0_ruser
+              // AXI manager 1 port parameters
+              , t_axm_1_id
+              , t_axm_1_addr
+              , t_axm_1_data
+              , t_axm_1_awuser
+              , t_axm_1_wuser
+              , t_axm_1_buser
+              , t_axm_1_aruser
+              , t_axm_1_ruser
+              // AXI subordinate 0 port parameters
+              , t_axs_0_id
+              , t_axs_0_addr
+              , t_axs_0_data
+              , t_axs_0_awuser
+              , t_axs_0_wuser
+              , t_axs_0_buser
+              , t_axs_0_aruser
+              , t_axs_0_ruser
+              // Number of interrupt lines
+              , t_n_irq) lo)
+  (WindCoreHi #( // AXI lite subordinate control port parameters
+                 t_axls_control_addr
+               , t_axls_control_data
+               , t_axls_control_awuser
+               , t_axls_control_wuser
+               , t_axls_control_buser
+               , t_axls_control_aruser
+               , t_axls_control_ruser
+               // AXI manager 0 port parameters
+               , t_axm_0_id
+               , t_axm_0_addr
+               , t_axm_0_data
+               , t_axm_0_awuser
+               , t_axm_0_wuser
+               , t_axm_0_buser
+               , t_axm_0_aruser
+               , t_axm_0_ruser
+               // AXI manager 1 port parameters
+               , t_axm_1_id
+               , t_axm_1_addr
+               , t_axm_1_data
+               , t_axm_1_awuser
+               , t_axm_1_wuser
+               , t_axm_1_buser
+               , t_axm_1_aruser
+               , t_axm_1_ruser
+               // AXI subordinate 0 port parameters
+               , t_axs_0_id
+               , t_axs_0_addr
+               , t_axs_0_data
+               , t_axs_0_awuser
+               , t_axs_0_wuser
+               , t_axs_0_buser
+               , t_axs_0_aruser
+               , t_axs_0_ruser));
   // TODO
   // here, discuss a standard map of the axilite requests received over the
   // WindCoreHi axi lite control port into the debug module interface, the irq
   // port and other methods of the WindCoreLo interface
   // This is currently done in the gfe repo / awsteria
   // Ask Nikhil about this...
-  interface control_slave = ?; // use an internal axi lite shim
-  interface master_0 = lo.master_0;
-  interface master_1 = lo.master_1;
-  interface slave_0 = lo.slave_0;
+  interface control_subordinate = ?; // use an internal axi lite shim
+  interface manager_0 = lo.manager_0;
+  interface manager_1 = lo.manager_1;
+  interface subordinate_0 = lo.subordinate_0;
 endmodule
 
 endpackage
