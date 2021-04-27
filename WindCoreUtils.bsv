@@ -28,11 +28,12 @@
 
 package WindCoreUtils;
 
-import WindCoreLo :: *;
-import WindCoreHi :: *;
+import WindCoreLo  :: *;
+import WindCoreMid :: *;
+import WindCoreHi  :: *;
 
-// Convert a WindCoreLo into a WindCoreHi
-module windCoreLo2Hi #(
+// Convert a WindCoreLo into a WindCoreMid
+module windCoreLo2Mid #(
   WindCoreLo #( // AXI manager 0 port parameters
                 t_axm_0_id
               , t_axm_0_addr
@@ -59,9 +60,74 @@ module windCoreLo2Hi #(
               , t_axs_0_wuser
               , t_axs_0_buser
               , t_axs_0_aruser
-              , t_axs_0_ruser
-              // Number of interrupt lines
-              , t_n_irq) lo)
+              , t_axs_0_ruse) lo
+              // PLIC ?
+              // Debug Module ?
+              )
+  (WindCoreMid #( // AXI manager 0 port parameters
+                  t_axm_0_id
+                , t_axm_0_addr
+                , t_axm_0_data
+                , t_axm_0_awuser
+                , t_axm_0_wuser
+                , t_axm_0_buser
+                , t_axm_0_aruser
+                , t_axm_0_ruser
+                // AXI manager 1 port parameters
+                , t_axm_1_id
+                , t_axm_1_addr
+                , t_axm_1_data
+                , t_axm_1_awuser
+                , t_axm_1_wuser
+                , t_axm_1_buser
+                , t_axm_1_aruser
+                , t_axm_1_ruser
+                // AXI subordinate 0 port parameters
+                , t_axs_0_id
+                , t_axs_0_addr
+                , t_axs_0_data
+                , t_axs_0_awuser
+                , t_axs_0_wuser
+                , t_axs_0_buser
+                , t_axs_0_aruser
+                , t_axs_0_ruser
+                // Number of interrupt lines
+                , t_n_irq));
+  // TODO
+  return ?;
+endmodule
+
+// Convert a WindCoreMid into a WindCoreHi
+module windCoreMid2Hi #(
+  WindCoreMid #( // AXI manager 0 port parameters
+                 t_axm_0_id
+               , t_axm_0_addr
+               , t_axm_0_data
+               , t_axm_0_awuser
+               , t_axm_0_wuser
+               , t_axm_0_buser
+               , t_axm_0_aruser
+               , t_axm_0_ruser
+               // AXI manager 1 port parameters
+               , t_axm_1_id
+               , t_axm_1_addr
+               , t_axm_1_data
+               , t_axm_1_awuser
+               , t_axm_1_wuser
+               , t_axm_1_buser
+               , t_axm_1_aruser
+               , t_axm_1_ruser
+               // AXI subordinate 0 port parameters
+               , t_axs_0_id
+               , t_axs_0_addr
+               , t_axs_0_data
+               , t_axs_0_awuser
+               , t_axs_0_wuser
+               , t_axs_0_buser
+               , t_axs_0_aruser
+               , t_axs_0_ruser
+               // Number of interrupt lines
+               , t_n_irq) mid)
   (WindCoreHi #( // AXI lite subordinate control port parameters
                  t_axls_control_addr
                , t_axls_control_data
@@ -104,9 +170,9 @@ module windCoreLo2Hi #(
   // This is currently done in the gfe repo / awsteria
   // Ask Nikhil about this...
   interface control_subordinate = ?; // use an internal axi lite shim
-  interface manager_0 = lo.manager_0;
-  interface manager_1 = lo.manager_1;
-  interface subordinate_0 = lo.subordinate_0;
+  interface manager_0 = mid.manager_0;
+  interface manager_1 = mid.manager_1;
+  interface subordinate_0 = mid.subordinate_0;
 endmodule
 
 endpackage

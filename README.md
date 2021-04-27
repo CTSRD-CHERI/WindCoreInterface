@@ -15,3 +15,19 @@ level signals such as the debugging interface through an AXI4 Lite port).
 The hope is for downstream projects, consumer of the individual wind cores, to
 only need develop against the types provided in this repository, hopefully
 helping towards seamless swapping of specific wind core implementation.
+
+## Notes
+
+Provided interfaces:
+
+* `WindCoreLo`  - not there yet
+* `WindCoreMid` - currently actively being worked on
+* `WindCoreHi`  - currently actively being worked on
+
+Currently unsupported by these interfaces:
+* Tandem verification / minimal PC debugging - TODO
+* RVFI-DII - TODO
+* Performance counters export -
+  internal? probably should not appear on the ifc?
+  possibly input to `WindCoreLo`...
+* to/fromHost - static? probably should not appear on the ifc?

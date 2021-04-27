@@ -28,12 +28,14 @@
 
 package WindCoreInterface;
 
-import WindCoreLo :: *;
-import WindCoreHi :: *;
+import WindCoreLo    :: *;
+import WindCoreMid   :: *;
+import WindCoreHi    :: *;
 import WindCoreUtils :: *;
 
-export WindCoreLo :: *;
-export WindCoreHi :: *;
+export WindCoreLo    :: *;
+export WindCoreMid   :: *;
+export WindCoreHi    :: *;
 export WindCoreUtils :: *;
 
 endpackage
