@@ -55,13 +55,13 @@ import ClientServer :: *;
 // * WriteReq should not generate any response
 // * ResetReq should not generate any response
 typedef union tagged {
-  Bit #(7) ReadReq;
-  Bit #(7) WriteReq;
-  void     ResetReq;
-} DebugModuleReq;
+  Bit #(7)                     ReadReq;
+  Tuple2#(Bit #(7), Bit #(32)) WriteReq;
+  void                         ResetReq;
+} DebugModuleReq deriving (Bits);
 typedef union tagged {
   Bit #(32) ReadRsp;
-} DebugModuleRsp;
+} DebugModuleRsp deriving (Bits);
 typedef Server #(DebugModuleReq, DebugModuleRsp) DebugModuleServer;
 // Debug module Reset client. Needed only since the debug module is currently
 // still embedded inside the core. Used to route the reset commands generated
@@ -84,10 +84,10 @@ endinterface
 typedef union tagged {
   void ReleaseReq;
   void StatusReq;
-} ControlStatusReq;
+} ControlStatusReq deriving (Bits);
 typedef union tagged {
   Bit #(8) StatusRsp;
-} ControlStatusRsp;
+} ControlStatusRsp deriving (Bits);
 typedef Server #(ControlStatusReq, ControlStatusRsp) ControlStatusServer;
 
 // The low lever WindCore interface
