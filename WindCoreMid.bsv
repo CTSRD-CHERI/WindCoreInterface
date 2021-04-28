@@ -45,23 +45,10 @@ package WindCoreMid;
 // XXX This is a work in progress! XXX
 
 import AXI4 :: *;
+import AXI4Lite :: *;
 import Vector :: *;
 import GetPut :: *;
 import ClientServer :: *;
-
-// Debug module interface helpers
-// ------------------------------
-// Debug module server for requests to the debug module
-// * ReadReq should generate a ReadRsp
-// * WriteReq should not generate any response
-typedef union tagged {
-  Bit #(7)                     ReadReq;
-  Tuple2#(Bit #(7), Bit #(32)) WriteReq;
-} DebugModuleReq deriving (Bits);
-typedef union tagged {
-  Bit #(32) ReadRsp;
-} DebugModuleRsp deriving (Bits);
-typedef Server #(DebugModuleReq, DebugModuleRsp) DebugModuleServer;
 
 // Other control and status interface helpers
 // ------------------------------------------
@@ -140,7 +127,7 @@ interface WindCoreMid #(
   // This interface should provide the functionalities that used to be supported
   // in Piccolo / Flute / Toooba by:
   // `interface DMI dm_dmi;`
-  interface DebugModuleServer debugModuleServer;
+  interface AXI4Lite_Slave #(7, 32, 0, 0, 0, 0, 0) debug_subordinate;
   // Note:
   // The `interface Client #(Bool, Bool) ndm_reset_client;` interface is thought
   // to not be required to appear on the Mid interface. The wiring of the reset
