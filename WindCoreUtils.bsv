@@ -32,10 +32,12 @@ import WindCoreLo  :: *;
 import WindCoreMid :: *;
 import WindCoreHi  :: *;
 
+import FIFOF      :: *;
 import Vector     :: *;
+import GetPut     :: *;
+import SourceSink :: *;
 import AXI4Lite   :: *;
 import Routable   :: *;
-import SourceSink :: *;
 
 // Convert a WindCoreLo into a WindCoreMid
 module windCoreLo2Mid #(
@@ -168,8 +170,9 @@ module windCoreMid2Hi #(
                , t_axs_0_buser
                , t_axs_0_aruser
                , t_axs_0_ruser))
-  provisos ( Add #(7, t0, t_axls_control_addr)
-           , Add #(32, 0, t_axls_control_data) );
+  provisos ( Add #(7, t0_, t_axls_control_addr)
+           , Add #(32, 0, t_axls_control_data)
+           , Add #(t_n_irq, t1_, 32) );
   // TODO
   // here, discuss a standard map of the axilite requests received over the
   // WindCoreHi axi lite control port into the debug module interface, the irq
@@ -178,6 +181,7 @@ module windCoreMid2Hi #(
   // Ask Nikhil about this...
 
   // setup the demuxing of the AXI lite control traffic
+  // --------------------------------------------------
   let ctrlShim <- mkAXI4LiteShim;
   Vector #(1, AXI4Lite_Master #( t_axls_control_addr
                                , t_axls_control_data
@@ -197,20 +201,65 @@ module windCoreMid2Hi #(
     subordinates = newVector;
   Vector #(3, Range #(t_axls_control_addr)) ranges = newVector;
   // debug traffic
+  // -------------
   subordinates[0] = compose ( zeroUserFields_AXI4Lite_Slave
                             , fmapAddress_AXI4Lite_Slave (truncate) )
                             (mid.debug_subordinate);
   ranges[0] = Range { base: 'h0000_0000, size: 'h0000_0000 };
   // irq traffic
-  subordinates[1] = culDeSac;
+  // -----------
+  FIFOF #(AXI4Lite_BFlit #(t_axls_control_buser)) bff <- mkFIFOF;
+  Tuple2 #( Sink #(AXI4Lite_AWFlit #( t_axls_control_addr
+                                    , t_axls_control_awuser))
+          , Sink #(AXI4Lite_WFlit #( t_axls_control_data
+                                   , t_axls_control_wuser)) )
+    writeSinks <- splitSink (interface Sink;
+    method canPut = True;
+    method put (writeflit) = action
+      match {.awflit, .wflit} = writeflit;
+      Vector #(t_n_irq, Bool) irqBitField = unpack ( truncate (wflit.wdata));
+      function Action setIrq (Put #(Bool) irqIfc, Bool doSet) = action
+        if (doSet) irqIfc.put (True);
+      endaction;
+      function Action clearIrq (Put #(Bool) irqIfc, Bool doClear) = action
+        if (doClear) irqIfc.put (False);
+      endaction;
+      case (awflit.awaddr[3:2])
+        // first 32-bits: set irq bitfield
+        0: zipWithM (setIrq, mid.irq, irqBitField);
+        // second 32-bits: clear irq bitfield
+        1: zipWithM (clearIrq, mid.irq, irqBitField);
+        // third 32-bits: set nmirq in lsb
+        2: setIrq (mid.nmirq, irqBitField[0]);
+        // fourth 32-bits: clear nmirq in lsb
+        3: clearIrq (mid.nmirq, irqBitField[0]);
+      endcase
+      bff.enq (AXI4Lite_BFlit { bresp: OKAY, buser: ? });
+    endaction;
+  endinterface);
+  match {.awIfc, .wIfc} = writeSinks;
+  match {.arIfc, .rIfc} <-
+    mkReqRspPost (mkFIFOF, constFn (AXI4Lite_RFlit { rdata: ?
+                                                   , rresp: SLVERR
+                                                   , ruser: ? }));
+  subordinates[1] = interface AXI4Lite_Slave;
+    interface aw = awIfc;
+    interface  w = wIfc;
+    interface  b = toSource (bff);
+    interface ar = arIfc;
+    interface  r = rIfc;
+  endinterface;
   ranges[1] = Range { base: 'h0000_0000, size: 'h0000_0000 };
   // other traffic
+  // -------------
   subordinates[2] = culDeSac;
   ranges[2] = Range { base: 'h0000_0000, size: 'h0000_0000 };
   // wire it all up
+  // --------------
   mkAXI4LiteBus ( routeFromMappingTable (ranges)
                 , managers, subordinates );
   // exported interface
+  // ------------------
   interface control_subordinate = ctrlShim.slave;
   interface manager_0 = mid.manager_0;
   interface manager_1 = mid.manager_1;
