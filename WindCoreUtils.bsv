@@ -167,7 +167,9 @@ module windCoreMid2Hi #(
                , t_axs_0_wuser
                , t_axs_0_buser
                , t_axs_0_aruser
-               , t_axs_0_ruser));
+               , t_axs_0_ruser))
+  provisos ( Add #(7, t0, t_axls_control_addr)
+           , Add #(32, 0, t_axls_control_data) );
   // TODO
   // here, discuss a standard map of the axilite requests received over the
   // WindCoreHi axi lite control port into the debug module interface, the irq
@@ -195,7 +197,9 @@ module windCoreMid2Hi #(
     subordinates = newVector;
   Vector #(3, Range #(t_axls_control_addr)) ranges = newVector;
   // debug traffic
-  subordinates[0] = culDeSac;
+  subordinates[0] = compose ( zeroUserFields_AXI4Lite_Slave
+                            , fmapAddress_AXI4Lite_Slave (truncate) )
+                            (mid.debug_subordinate);
   ranges[0] = Range { base: 'h0000_0000, size: 'h0000_0000 };
   // irq traffic
   subordinates[1] = culDeSac;
