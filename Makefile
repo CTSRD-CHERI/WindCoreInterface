@@ -26,21 +26,24 @@
 # @BERI_LICENSE_HEADER_END@
 #
 
-BSC = bsc
+SRCS  = WindCoreInterface.bsv
+SRCS += WindCoreHi.bsv
+SRCS += WindCoreLo.bsv
+SRCS += WindCoreMid.bsv
+SRCS += WindCoreUtils.bsv
 
 BLUESTUFFDIR = ./BlueStuff
 BLUEBASICSDIR = $(BLUESTUFFDIR)/BlueBasics
 AXIDIR = $(BLUESTUFFDIR)/AXI
-BSVPATH = +:$(BLUESTUFFDIR):$(AXIDIR):$(BLUEBASICSDIR):$(BLUEUTILSDIR)
-
-BSCFLAGS = -p $(BSVPATH)
 
 # generated files directories
 BUILDDIR = build
 BDIR = $(BUILDDIR)/bdir
 
+BSC = bsc
+BSVPATH = +:$(BLUESTUFFDIR):$(AXIDIR):$(BLUEBASICSDIR):$(BLUEUTILSDIR)
+BSCFLAGS = -p $(BSVPATH)
 BSCFLAGS += -bdir $(BDIR)
-
 #BSCFLAGS += +RTS -K512M -RTS
 #BSCFLAGS += -show-schedule
 #BSCFLAGS += -sched-dot
@@ -48,11 +51,12 @@ BSCFLAGS += -bdir $(BDIR)
 #BSCFLAGS += -show-rule-rel \* \*
 #BSCFLAGS += -steps-warn-interval n
 
+.PHONY: all
 all: $(BDIR)/WindCoreInterface.bo
 
-$(BDIR)/WindCoreInterface.bo: WindCoreInterface.bsv
+$(BDIR)/WindCoreInterface.bo: $(SRCS)
 	mkdir -p $(BDIR)
-	$(BSC) $(BSCFLAGS) -sim -u $<
+	$(BSC) $(BSCFLAGS) -sim -u WindCoreInterface.bsv
 
 .PHONY: clean
 

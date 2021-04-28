@@ -32,6 +32,11 @@ import WindCoreLo  :: *;
 import WindCoreMid :: *;
 import WindCoreHi  :: *;
 
+import Vector     :: *;
+import AXI4Lite   :: *;
+import Routable   :: *;
+import SourceSink :: *;
+
 // Convert a WindCoreLo into a WindCoreMid
 module windCoreLo2Mid #(
   WindCoreLo #( // AXI manager 0 port parameters
@@ -169,7 +174,40 @@ module windCoreMid2Hi #(
   // port and other methods of the WindCoreLo interface
   // This is currently done in the gfe repo / awsteria
   // Ask Nikhil about this...
-  interface control_subordinate = ?; // use an internal axi lite shim
+
+  // setup the demuxing of the AXI lite control traffic
+  let ctrlShim <- mkAXI4LiteShim;
+  Vector #(1, AXI4Lite_Master #( t_axls_control_addr
+                               , t_axls_control_data
+                               , t_axls_control_awuser
+                               , t_axls_control_wuser
+                               , t_axls_control_buser
+                               , t_axls_control_aruser
+                               , t_axls_control_ruser ))
+    managers = cons (ctrlShim.master, nil);
+  Vector #(3, AXI4Lite_Slave #( t_axls_control_addr
+                              , t_axls_control_data
+                              , t_axls_control_awuser
+                              , t_axls_control_wuser
+                              , t_axls_control_buser
+                              , t_axls_control_aruser
+                              , t_axls_control_ruser ))
+    subordinates = newVector;
+  Vector #(3, Range #(t_axls_control_addr)) ranges = newVector;
+  // debug traffic
+  subordinates[0] = culDeSac;
+  ranges[0] = Range { base: 'h0000_0000, size: 'h0000_0000 };
+  // irq traffic
+  subordinates[1] = culDeSac;
+  ranges[1] = Range { base: 'h0000_0000, size: 'h0000_0000 };
+  // other traffic
+  subordinates[2] = culDeSac;
+  ranges[2] = Range { base: 'h0000_0000, size: 'h0000_0000 };
+  // wire it all up
+  mkAXI4LiteBus ( routeFromMappingTable (ranges)
+                , managers, subordinates );
+  // exported interface
+  interface control_subordinate = ctrlShim.slave;
   interface manager_0 = mid.manager_0;
   interface manager_1 = mid.manager_1;
   interface subordinate_0 = mid.subordinate_0;
