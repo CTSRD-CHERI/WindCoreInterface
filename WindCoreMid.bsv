@@ -133,9 +133,10 @@ interface WindCoreMid #(
   // debug module is exposed here in a Server interface supporting resets, reads
   // and write requests.
   // It is currently expected that Piccolo / Flute / Toooba would handle a
-  // debug module ResetReq using the `assertReset` method of a `MakeResetIfc`
+  // debug module reset command using an `assertReset` call (in `MakeResetIfc`)
   // from a `mkReset` module, and use the associated `new_rst` signal as input
-  // to the `reset_by` attribute on the debug module instance.
+  // to the `reset_by` attribute on the appropriate module instances (or
+  // similar).
   // This interface should provide the functionalities that used to be supported
   // in Piccolo / Flute / Toooba by:
   // `interface DMI dm_dmi;`
