@@ -177,7 +177,10 @@ module windCoreMid2Hi #(
   // here, discuss a standard map of the axilite requests received over the
   // WindCoreHi axi lite control port into the debug module interface, the irq
   // port and other methods of the WindCoreLo interface
-  // This is currently done in the gfe repo / awsteria
+  // At the moment, the allocation is as follows:
+  // 0x0000_0000 -> 0x0000_0fff : Debug Unit
+  // 0x0001_0000 -> 0x0001_0fff : Interrupt lines
+  // 0x0002_0000 -> 0x0002_0fff : Others (still unclear what exactly)
   // Ask Nikhil about this...
 
   // setup the demuxing of the AXI lite control traffic
@@ -205,7 +208,7 @@ module windCoreMid2Hi #(
   subordinates[0] = compose ( zeroUserFields_AXI4Lite_Slave
                             , fmapAddress_AXI4Lite_Slave (truncate) )
                             (mid.debug_subordinate);
-  ranges[0] = Range { base: 'h0000_0000, size: 'h0000_0000 };
+  ranges[0] = Range { base: 'h0000_0000, size: 'h0000_1000 };
   // irq traffic
   // -----------
   FIFOF #(AXI4Lite_BFlit #(t_axls_control_buser)) bff <- mkFIFOF;
@@ -249,11 +252,11 @@ module windCoreMid2Hi #(
     interface ar = arIfc;
     interface  r = rIfc;
   endinterface;
-  ranges[1] = Range { base: 'h0000_0000, size: 'h0000_0000 };
+  ranges[1] = Range { base: 'h0001_0000, size: 'h0000_1000 };
   // other traffic
   // -------------
   subordinates[2] = culDeSac;
-  ranges[2] = Range { base: 'h0000_0000, size: 'h0000_0000 };
+  ranges[2] = Range { base: 'h0002_0000, size: 'h0000_1000 };
   // wire it all up
   // --------------
   mkAXI4LiteBus ( routeFromMappingTable (ranges)
