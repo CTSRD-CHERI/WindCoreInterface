@@ -72,8 +72,16 @@ module windCoreLo2Mid #(
               // PLIC ?
               // Debug Module ?
               )
-  (WindCoreMid #( // AXI manager 0 port parameters
-                  t_axm_0_id
+  (WindCoreMid #( // AXI lite subordinate control port parameters
+                  t_axls_control_addr
+                , t_axls_control_data
+                , t_axls_control_awuser
+                , t_axls_control_wuser
+                , t_axls_control_buser
+                , t_axls_control_aruser
+                , t_axls_control_ruser
+                // AXI manager 0 port parameters
+                , t_axm_0_id
                 , t_axm_0_addr
                 , t_axm_0_data
                 , t_axm_0_awuser
@@ -109,8 +117,16 @@ endmodule
 // derive the exposed AXI4 Lite memory map, and possibly some other AXI4 Lite
 // subordinates together with their desired mappings
 module mkMidCtrlMap #(
-  WindCoreMid #( // AXI manager 0 port parameters
-                 t_axm_0_id
+  WindCoreMid #( // AXI lite subordinate control port parameters
+                 t_axls_control_addr
+               , t_axls_control_data
+               , t_axls_control_awuser
+               , t_axls_control_wuser
+               , t_axls_control_buser
+               , t_axls_control_aruser
+               , t_axls_control_ruser
+               // AXI manager 0 port parameters
+               , t_axm_0_id
                , t_axm_0_addr
                , t_axm_0_data
                , t_axm_0_awuser
@@ -181,9 +197,7 @@ module mkMidCtrlMap #(
   Vector #(3, Range #(t_axls_control_addr)) ranges = newVector;
   // debug traffic
   // -------------
-  subordinates[0] = compose ( zeroUserFields_AXI4Lite_Slave
-                            , fmapAddress_AXI4Lite_Slave (truncate) )
-                            (mid.debug_subordinate);
+  subordinates[0] = zeroUserFields_AXI4Lite_Slave (mid.debug_subordinate);
   ranges[0] = Range { base: 'h0000_0000, size: 'h0000_1000 };
   // irq traffic
   // -----------
@@ -243,8 +257,16 @@ endmodule
 // Convert a WindCoreMid into a WindCoreHi, and optionally expose extra AXI4
 // Lite subordinates passed as arguments.
 module windCoreMid2Hi_WithSubordinates #(
-  WindCoreMid #( // AXI manager 0 port parameters
-                 t_axm_0_id
+  WindCoreMid #( // AXI lite subordinate control port parameters
+                 t_axls_control_addr
+               , t_axls_control_data
+               , t_axls_control_awuser
+               , t_axls_control_wuser
+               , t_axls_control_buser
+               , t_axls_control_aruser
+               , t_axls_control_ruser
+               // AXI manager 0 port parameters
+               , t_axm_0_id
                , t_axm_0_addr
                , t_axm_0_data
                , t_axm_0_awuser
@@ -342,8 +364,16 @@ module windCoreMid2Hi_WithSubordinates #(
 endmodule
 
 module windCoreMid2Hi #(
-  WindCoreMid #( // AXI manager 0 port parameters
-                 t_axm_0_id
+  WindCoreMid #( // AXI lite subordinate control port parameters
+                 t_axls_control_addr
+               , t_axls_control_data
+               , t_axls_control_awuser
+               , t_axls_control_wuser
+               , t_axls_control_buser
+               , t_axls_control_aruser
+               , t_axls_control_ruser
+               // AXI manager 0 port parameters
+               , t_axm_0_id
                , t_axm_0_addr
                , t_axm_0_data
                , t_axm_0_awuser

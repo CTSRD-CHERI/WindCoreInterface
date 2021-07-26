@@ -73,8 +73,16 @@ typedef Server #(ControlStatusReq, ControlStatusRsp) ControlStatusServer;
 // The mid lever WindCore interface
 // --------------------------------
 interface WindCoreMid #(
+// AXI lite subordinate control port parameters
+  numeric type t_axls_control_addr
+, numeric type t_axls_control_data
+, numeric type t_axls_control_awuser
+, numeric type t_axls_control_wuser
+, numeric type t_axls_control_buser
+, numeric type t_axls_control_aruser
+, numeric type t_axls_control_ruser
 // AXI manager 0 port parameters
-  numeric type t_axm_0_id
+, numeric type t_axm_0_id
 , numeric type t_axm_0_addr
 , numeric type t_axm_0_data
 , numeric type t_axm_0_awuser
@@ -127,7 +135,13 @@ interface WindCoreMid #(
   // This interface should provide the functionalities that used to be supported
   // in Piccolo / Flute / Toooba by:
   // `interface DMI dm_dmi;`
-  interface AXI4Lite_Slave #(7, 32, 0, 0, 0, 0, 0) debug_subordinate;
+  interface AXI4Lite_Slave #( t_axls_control_addr
+                            , t_axls_control_data
+                            , t_axls_control_awuser
+                            , t_axls_control_wuser
+                            , t_axls_control_buser
+                            , t_axls_control_aruser
+                            , t_axls_control_ruser ) debug_subordinate;
   // Note:
   // The `interface Client #(Bool, Bool) ndm_reset_client;` interface is thought
   // to not be required to appear on the Mid interface. The wiring of the reset
