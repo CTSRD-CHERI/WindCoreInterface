@@ -256,7 +256,7 @@ endmodule
 
 // Convert a WindCoreMid into a WindCoreHi, and optionally expose extra AXI4
 // Lite subordinates passed as arguments.
-module windCoreMid2Hi_WithSubordinates #(
+module windCoreMid2Hi_WithCtrlSubordinates #(
   WindCoreMid #( // AXI lite subordinate control port parameters
                  t_axls_control_addr
                , t_axls_control_data
@@ -439,7 +439,7 @@ module windCoreMid2Hi #(
   provisos ( Add #(7, t0_, t_axls_control_addr)
            , Add #(32, 0, t_axls_control_data)
            , Add #(t_n_irq, t1_, 32) );
-  let hi <- windCoreMid2Hi_WithSubordinates (mid, tuple2 (nil, nil));
+  let hi <- windCoreMid2Hi_WithCtrlSubordinates (mid, tuple2 (nil, nil));
   return hi;
 endmodule
 
