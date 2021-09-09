@@ -32,7 +32,7 @@ import AXI4 :: *;
 import AXI4Lite :: *;
 
 // This package defines the "hi level" WindCore interfaces.
-// It defines both a "non-synth" and a "synth" version of the hi level interface
+// It defines both a "non-sig" and a "sig" version of the hi level interface
 // for easy bluespec component composition and for clean verilog generation.
 // This interface aims to factor the control signals from the WindCoreLo
 // interface into a single AXILite subordinate port, and re export the other
@@ -43,8 +43,8 @@ import AXI4Lite :: *;
 // powerful enough to express this. For this reason interface is defined twice,
 // and should be maintained accordingly.
 
-///////////////////////////////////////
-// "non synth in-bluespec" interface //
+/////////////////////////////////////
+// "non sig in-bluespec" interface //
 ////////////////////////////////////////////////////////////////////////////////
 
 interface WindCoreHi #(
@@ -138,11 +138,11 @@ interface WindCoreHi #(
 
 endinterface
 
-//////////////////////////////////
-// Replicated "synth" interface //
+////////////////////////////////
+// Replicated "sig" interface //
 ////////////////////////////////////////////////////////////////////////////////
 
-interface WindCoreHi_Synth #(
+interface WindCoreHi_Sig #(
 // AXI lite subordinate control port parameters
   numeric type t_axls_control_addr
 , numeric type t_axls_control_data
@@ -184,7 +184,7 @@ interface WindCoreHi_Synth #(
   ////////////////////
 
   // AXI lite subordinate control port
-  interface AXI4Lite_Slave_Synth #(
+  interface AXI4Lite_Slave_Sig #(
     t_axls_control_addr
   , t_axls_control_data
   , t_axls_control_awuser
@@ -198,7 +198,7 @@ interface WindCoreHi_Synth #(
   ////////////////////
 
   // AXI manager 0 port parameters
-  interface AXI4_Master_Synth #(
+  interface AXI4_Master_Sig #(
     t_axm_0_id
   , t_axm_0_addr
   , t_axm_0_data
@@ -209,7 +209,7 @@ interface WindCoreHi_Synth #(
   , t_axm_0_ruser
   ) manager_0;
   // AXI manager 1 port parameters
-  interface AXI4_Master_Synth #(
+  interface AXI4_Master_Sig #(
     t_axm_1_id
   , t_axm_1_addr
   , t_axm_1_data
@@ -220,7 +220,7 @@ interface WindCoreHi_Synth #(
   , t_axm_1_ruser
   ) manager_1;
   // AXI subordinate 0 port parameters
-  interface AXI4_Slave_Synth #(
+  interface AXI4_Slave_Sig #(
     t_axs_0_id
   , t_axs_0_addr
   , t_axs_0_data
@@ -233,11 +233,11 @@ interface WindCoreHi_Synth #(
 
 endinterface
 
-////////////////////////////////////
-// convert "non-synth" to "synth" //
+////////////////////////////////
+// convert "non-sig" to "sig" //
 ////////////////////////////////////////////////////////////////////////////////
 
-module toWindCoreHi_Synth #(
+module toWindCoreHi_Sig #(
   WindCoreHi #( // AXI lite subordinate control port parameters
                 t_axls_control_addr
               , t_axls_control_data
@@ -273,50 +273,49 @@ module toWindCoreHi_Synth #(
               , t_axs_0_buser
               , t_axs_0_aruser
               , t_axs_0_ruser) ifc)
-  (WindCoreHi_Synth #( // AXI lite subordinate control port parameters
-                       t_axls_control_addr
-                     , t_axls_control_data
-                     , t_axls_control_awuser
-                     , t_axls_control_wuser
-                     , t_axls_control_buser
-                     , t_axls_control_aruser
-                     , t_axls_control_ruser
-                     // AXI manager 0 port parameters
-                     , t_axm_0_id
-                     , t_axm_0_addr
-                     , t_axm_0_data
-                     , t_axm_0_awuser
-                     , t_axm_0_wuser
-                     , t_axm_0_buser
-                     , t_axm_0_aruser
-                     , t_axm_0_ruser
-                     // AXI manager 1 port parameters
-                     , t_axm_1_id
-                     , t_axm_1_addr
-                     , t_axm_1_data
-                     , t_axm_1_awuser
-                     , t_axm_1_wuser
-                     , t_axm_1_buser
-                     , t_axm_1_aruser
-                     , t_axm_1_ruser
-                     // AXI subordinate 0 port parameters
-                     , t_axs_0_id
-                     , t_axs_0_addr
-                     , t_axs_0_data
-                     , t_axs_0_awuser
-                     , t_axs_0_wuser
-                     , t_axs_0_buser
-                     , t_axs_0_aruser
-                     , t_axs_0_ruser));
-  let control_subordinate_synth <- toAXI4Lite_Slave_Synth
-                                     (ifc.control_subordinate);
-  let manager_0_synth <- toAXI4_Master_Synth (ifc.manager_0);
-  let manager_1_synth <- toAXI4_Master_Synth (ifc.manager_1);
-  let subordinate_0_synth <- toAXI4_Slave_Synth (ifc.subordinate_0);
-  interface control_subordinate = control_subordinate_synth;
-  interface manager_0 = manager_0_synth;
-  interface manager_1 = manager_1_synth;
-  interface subordinate_0 = subordinate_0_synth;
+  (WindCoreHi_Sig #( // AXI lite subordinate control port parameters
+                     t_axls_control_addr
+                   , t_axls_control_data
+                   , t_axls_control_awuser
+                   , t_axls_control_wuser
+                   , t_axls_control_buser
+                   , t_axls_control_aruser
+                   , t_axls_control_ruser
+                   // AXI manager 0 port parameters
+                   , t_axm_0_id
+                   , t_axm_0_addr
+                   , t_axm_0_data
+                   , t_axm_0_awuser
+                   , t_axm_0_wuser
+                   , t_axm_0_buser
+                   , t_axm_0_aruser
+                   , t_axm_0_ruser
+                   // AXI manager 1 port parameters
+                   , t_axm_1_id
+                   , t_axm_1_addr
+                   , t_axm_1_data
+                   , t_axm_1_awuser
+                   , t_axm_1_wuser
+                   , t_axm_1_buser
+                   , t_axm_1_aruser
+                   , t_axm_1_ruser
+                   // AXI subordinate 0 port parameters
+                   , t_axs_0_id
+                   , t_axs_0_addr
+                   , t_axs_0_data
+                   , t_axs_0_awuser
+                   , t_axs_0_wuser
+                   , t_axs_0_buser
+                   , t_axs_0_aruser
+                   , t_axs_0_ruser));
+  let control_subordinate_sig <- toAXI4Lite_Slave_Sig (ifc.control_subordinate);
+  let manager_0_sig <- toAXI4_Master_Sig (ifc.manager_0);
+  let manager_1_sig <- toAXI4_Master_Sig (ifc.manager_1);
+  let subordinate_0_sig <- toAXI4_Slave_Sig (ifc.subordinate_0);
+  interface control_subordinate = control_subordinate_sig;
+  interface manager_0 = manager_0_sig;
+  interface manager_1 = manager_1_sig;
+  interface subordinate_0 = subordinate_0_sig;
 endmodule
 
 endpackage
