@@ -324,9 +324,9 @@ module windCoreMid2Hi_Core #(
                    , Range { base: 'h0000_0000, size: 'h0000_1000 } );
   // irq traffic
   let irqSub <- mkIrqAXI4Lite_Subordinate (prioIrqs, cons (mid.nmirq, nil));
-  subs[1] = tuple2 (irqSub, Range { base: 'h0001_0000, size: 'h0000_1000 });
+  subs[1] = tuple2 (irqSub, Range { base: 'h0000_1000, size: 'h0000_1000 });
   // rest of the traffic
-  subs[2] = tuple2 (culDeSac, Range { base: 'h0002_0000, size: 'h0000_1000 });
+  subs[2] = tuple2 (culDeSac, Range { base: 'h0000_2000, size: 'h0000_1000 });
   // append with other subordinates
   match {.subordinates, .ranges} = unzip (append (subs, others));
 
