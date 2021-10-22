@@ -301,15 +301,14 @@ module windCoreMid2Hi_Core #(
 
   // AXI4Lite subordinates
   // ---------------------
-  // TODO
-  // here, discuss a standard map of the axilite requests received over the
-  // WindCoreHi axi lite control port into the debug module interface, the irq
-  // port and other methods of the WindCoreLo interface
-  // At the moment, the allocation is as follows:
+  // Requests received over the WindCoreHi axi lite control port are routed as
+  // follows:
   // 0x0000_0000 -> 0x0000_0fff : Debug Unit
-  // 0x0001_0000 -> 0x0001_0fff : Interrupt lines
-  // 0x0002_0000 -> 0x0002_0fff : Others (still unclear what exactly)
-  // Ask Nikhil about this...
+  // 0x0000_1000 -> 0x0000_1fff : Interrupt lines
+  // 0x0000_2000 -> 0x0000_2fff : Others (still unclear what exactly)
+  // Additional address ranges can be received together with additional AXI4Lite
+  // subordinates in the "others" argument to this module
+  // TODO: Ask Nikhil about this...
   Vector #(3, Tuple2 #( AXI4Lite_Slave #( t_axls_control_addr
                                         , t_axls_control_data
                                         , t_axls_control_awuser
