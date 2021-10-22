@@ -23,14 +23,17 @@ Provided interfaces:
 * `WindCoreLo`  - not there yet
 * `WindCoreMid` - currently actively being worked on
 * `WindCoreHi`  - currently actively being worked on
-  Note: constructing a `WindCoreHi` from a `WindCoreMid` using the
-  `windCoreMid2Hi[_core]` module exposes via the AXI4Lite subordinate port and
-  at the given offsets the following:
-    - offsets `0x0000_0000` -> `0x0000_0fff`: Debug Unit
-    - offsets `0x0000_1000` -> `0x0000_1fff`: Interrupt lines
-    - offsets `0x0000_2000` -> `0x0000_2fff`: Others (unclear what exactly...)
-  Additional AXI4Lite subordinates can also be explicitly mapped when using the
-  `_core` version of the `windCoreMid2Hi` constructor.
+
+Note: constructing a `WindCoreHi` from a `WindCoreMid` using the
+`windCoreMid2Hi[_core]` module exposes via the AXI4Lite subordinate port and at
+the given offsets the following:
+
+  - offsets `0x0000_0000` -> `0x0000_0fff`: Debug Unit
+  - offsets `0x0000_1000` -> `0x0000_1fff`: Interrupt lines
+  - offsets `0x0000_2000` -> `0x0000_2fff`: Others (unclear what exactly...)
+
+Additional AXI4Lite subordinates can also be explicitly mapped when using the
+`_core` version of the `windCoreMid2Hi` constructor.
 
 Currently unsupported by these interfaces:
 * Tandem verification / minimal PC debugging - TODO
