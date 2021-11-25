@@ -319,7 +319,7 @@ module windCoreMid2Hi_Core #(
                       , Range #(t_axls_control_addr) ))
     subs = newVector;
   // debug traffic
-  subs[0] = tuple2 ( zeroUserFields_AXI4Lite_Slave (mid.debug_subordinate)
+  subs[0] = tuple2 ( zero_AXI4Lite_Slave_user (mid.debug_subordinate)
                    , Range { base: 'h0000_0000, size: 'h0000_1000 } );
   // irq traffic
   let irqSub <- mkIrqAXI4Lite_Subordinate (prioIrqs, cons (mid.nmirq, nil));
