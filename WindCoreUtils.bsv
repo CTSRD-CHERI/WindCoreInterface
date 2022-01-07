@@ -289,7 +289,7 @@ module windCoreMid2Hi_Core #(
 
   // AXI4Lite manager
   // ----------------
-  let ctrlShim <- mkAXI4LiteShim;
+  let ctrlShim <- mkAXI4LiteShimFF;
   Vector #(1, AXI4Lite_Master #( t_axls_control_addr
                                , t_axls_control_data
                                , t_axls_control_awuser
