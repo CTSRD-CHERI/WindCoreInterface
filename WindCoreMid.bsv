@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2021 Alexandre Joannou
+ * Copyright (c) 2021-2022 Alexandre Joannou
  * All rights reserved.
  *
  * This software was developed by SRI International and the University of
@@ -44,8 +44,7 @@ package WindCoreMid;
 
 // XXX This is a work in progress! XXX
 
-import AXI4 :: *;
-import AXI4Lite :: *;
+import BlueAXI4 :: *;
 import Vector :: *;
 import GetPut :: *;
 import ClientServer :: *;

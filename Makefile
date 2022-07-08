@@ -1,5 +1,5 @@
 #-
-# Copyright (c) 2021 Alexandre Joannou
+# Copyright (c) 2021-2022 Alexandre Joannou
 # All rights reserved.
 #
 # This software was developed by SRI International and the University of
@@ -32,16 +32,17 @@ SRCS += WindCoreLo.bsv
 SRCS += WindCoreMid.bsv
 SRCS += WindCoreUtils.bsv
 
-BLUESTUFFDIR = ./BlueStuff
+BLUESTUFFDIR = $(CURDIR)/BlueStuff
+BLUEAXI4DIR = $(BLUESTUFFDIR)/BlueAXI4
+BLUEAXI4DIRS = $(BLUEAXI4DIR):$(BLUEAXI4DIR)/AXI4:$(BLUEAXI4DIR)/AXI4Lite:$(BLUEAXI4DIR)/AXI4Stream:$(BLUEAXI4DIR)/BlueUnixBridges
 BLUEBASICSDIR = $(BLUESTUFFDIR)/BlueBasics
-AXIDIR = $(BLUESTUFFDIR)/AXI
 
 # generated files directories
 BUILDDIR = build
 BDIR = $(BUILDDIR)/bdir
 
 BSC = bsc
-BSVPATH = +:$(BLUESTUFFDIR):$(AXIDIR):$(BLUEBASICSDIR):$(BLUEUTILSDIR)
+BSVPATH = +:$(BLUESTUFFDIR):$(BLUEAXI4DIRS):$(BLUEBASICSDIR):$(BLUEUTILSDIR)
 BSCFLAGS = -p $(BSVPATH)
 BSCFLAGS += -bdir $(BDIR)
 #BSCFLAGS += +RTS -K512M -RTS
