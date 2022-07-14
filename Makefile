@@ -51,6 +51,7 @@ BSCFLAGS += -bdir $(BDIR)
 #BSCFLAGS += -show-range-conflict
 #BSCFLAGS += -show-rule-rel \* \*
 #BSCFLAGS += -steps-warn-interval n
+BSCFLAGS += -suppress-warnings T0127:S0080 # no orphan typeclass warning
 
 .PHONY: all
 all: $(BDIR)/WindCoreInterface.bo
