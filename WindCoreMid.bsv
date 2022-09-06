@@ -53,11 +53,14 @@ import ClientServer :: *;
 // ------------------------------------------
 // Control and Status server for general requests to the core
 // * ReleaseReq should release the core from a blocking state. It should not
-//   generate any response
-// * StatusReq should generate a response returning a status code from the core
+//   generate any response.
+// * ReleaseAndSetToHostAddrReq should set the tohost address and release the
+//   core from a blocking state. It should not generate any response.
+// * StatusReq should generate a response returning a status code from the core.
 typedef union tagged {
   void ReleaseReq;
   void StatusReq;
+  Bit #(64) ReleaseAndSetToHostAddrReq;
 } ControlStatusReq deriving (Bits);
 typedef union tagged {
   Bit #(8) StatusRsp;
